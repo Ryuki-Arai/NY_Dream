@@ -9,6 +9,6 @@ public class PlayerAnimController : MonoBehaviour
     [SerializeField] PlayerController _pc;
     private void Update()
     {
-        _playerAnim.SetFloat("Speed",_pc.Ps.y);
+        _playerAnim.SetFloat("Speed",_pc.Pos.y);
     }
 }

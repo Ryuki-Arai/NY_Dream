@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using System.Collections;
 using Unity.VisualScripting;
+using TMPro;
 
 public class UiManager : MonoBehaviour
 {
@@ -15,10 +16,10 @@ public class UiManager : MonoBehaviour
     Canvas _resultCanvas;
 
     [SerializeField, Header("スコアを表示するテキスト")]
-    Text _scoreText;
+    TMP_Text _scoreText;
 
     [SerializeField, Header("ゲームの制限時間を表示するテキスト")]
-    Text _timeText;
+    TMP_Text _timeText;
 
     [SerializeField, Header("タバコのイメージ画像")]
     Image _smongImage;

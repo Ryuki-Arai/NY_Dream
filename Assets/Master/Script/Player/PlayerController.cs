@@ -9,28 +9,21 @@ using UniRx;
 [RequireComponent(typeof(CircleCollider2D))]
 public class PlayerController : MonoBehaviour
 {
-    
-    [Tooltip("プレイヤーの縦入力値")]
-    float _v = default;
-    [SerializeField, Header("プレイヤーの移動速度調整用値"), Range(1, 100)]
-    float _speed = 10;
-    [SerializeField]Rigidbody2D _rb;
-    Vector2 _ps;
+
+    [SerializeField, Header("プレイヤーの飛翔度調整用値")]
+    float _power = 10;
+    Rigidbody2D _rb2d;
+    Vector2 _pos;
     ReactiveProperty<bool> _isPushed = new ReactiveProperty<bool>();
 
     public IReadOnlyReactiveProperty<bool> IsPushed => _isPushed;
-    public Vector2 Ps { get => _ps;}
+    public Vector2 Pos { get => _pos;}
 
     void Start()
     {
-        
+        _rb2d = GetComponent<Rigidbody2D>();
     }
     void Update()
-    {
-        _v = Input.GetAxisRaw("Vertical");
-        _isPushed.Value = Input.GetButtonDown("Jump");
-    }
-    void FixedUpdate()
     {
         PlayerMove();
     }
@@ -39,9 +32,13 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     void PlayerMove()
     {
-        _ps.y = _v * _speed;
-        _rb.velocity = Ps.normalized;
+        if (Input.GetMouseButtonDown(0))
+        {
+            _rb2d.velocity = Vector2.zero;
+            _rb2d.AddForce(transform.up * _power, ForceMode2D.Impulse);
+        }
     }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         //ItemBase持ちだけに反応しActionを呼ぶ

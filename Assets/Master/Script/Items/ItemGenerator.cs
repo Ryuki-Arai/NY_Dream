@@ -8,7 +8,7 @@ public class ItemGenerator : MonoBehaviour
     float _interval = 1f;
     float _timeCount;
     [SerializeField,Tooltip("生成する位置"),Header("生成する位置")]
-    Transform _generatePos;
+    Transform[] _generatePos;
     [SerializeField,Tooltip("生成するもの"),Header("生成するobject")]
     ItemBase[] _allItems;
     [Tooltip("ItemTypeがeggplantの物のみ")]
@@ -61,7 +61,7 @@ public class ItemGenerator : MonoBehaviour
         int _itemNum = Random.Range(0, _allItems.Length);
         if (_rand >= _allItems[_itemNum].Probability)
         {
-            Instantiate(_allItems[_itemNum], _generatePos);
+            Instantiate(_allItems[_itemNum], _generatePos[Random.Range(0,_generatePos.Length)]);
             //サウンドを鳴らす
         }
         else
@@ -76,6 +76,6 @@ public class ItemGenerator : MonoBehaviour
     void CreateItemOnFever()
     {
         int _itemNum = Random.Range(_minProbability, _eggplants.Length);
-        Instantiate(_eggplants[_itemNum], _generatePos);
+        Instantiate(_eggplants[_itemNum], _generatePos[Random.Range(0, _generatePos.Length)]);
     }
 }
