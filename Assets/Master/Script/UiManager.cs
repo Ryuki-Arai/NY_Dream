@@ -26,7 +26,7 @@ public class UIManager : MonoBehaviour
     Slider _fanGaugeSlider;
 
     [SerializeField, Header("フィーバーゲージのスライダー")]
-    Slider _fevarGaugeSlider;
+    HAgauge _fevarGaugeSlider;
 
     [SerializeField, Header("スコアの変化にかける時間")]
     float _changeValueInterval;
@@ -49,10 +49,10 @@ public class UIManager : MonoBehaviour
     GameState _changeState;
 
     [SerializeField, Header("扇ゲージの最大")]
-    float _fanSliderValueMax = 10;
+    int _fanSliderValueMax = 10;
 
     [SerializeField, Header("フィーバーゲージの最大")]
-    float _fevarSliderValueMax = 10;
+    int _fevarSliderValueMax = 10;
 
     //ゲーム時間の計測用
     float _timer;
@@ -69,7 +69,7 @@ public class UIManager : MonoBehaviour
     private void Awake()
     {
         GameManager.Instance.SetUI(this);
-        _fevarGaugeSlider.maxValue = _fevarSliderValueMax;
+        _fevarGaugeSlider.SetValue(_fevarSliderValueMax);
         _fanGaugeSlider.maxValue = _fanSliderValueMax;
 
         _timer = _gameTime;
@@ -118,11 +118,11 @@ public class UIManager : MonoBehaviour
         if (_changeState != GameState.Fevar)
         {
             if (gaugeValue >= _fevarSliderValueMax) { GameManager.Instance.ChangeState(GameState.Fevar); }
-
-            DOTween.To(() => _fevarGaugeSlider.value, // 連続的に変化させる対象の値
+            _fevarGaugeSlider.Value = (int)gaugeValue; //ToDo intとFloatごっちゃなの修正
+            /*DOTween.To(() => _fevarGaugeSlider.value, // 連続的に変化させる対象の値
                 x => _fevarGaugeSlider.value = x, // 変化させた値 x をどう処理するかを書く
                 gaugeValue, // x をどの値まで変化させるか指示する
-                _changeFevarGaugeInterval).OnComplete(() => IndicateFevar());
+                _changeFevarGaugeInterval).OnComplete(() => IndicateFevar());//*/
         }
     }
 
@@ -150,7 +150,7 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void IndicateFevar()
     {
-        if (_fevarGaugeSlider.value == _fevarSliderValueMax)
+        if (_fevarGaugeSlider.Value == _fevarSliderValueMax)
         {
             if (_eventTimer == 0)
             {
