@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UniRx;
 /// <summary>
 /// Playerの移動とアイテム取得時の動作を管理するコンポーネント
 /// </summary>
@@ -14,9 +13,9 @@ public class PlayerController : MonoBehaviour
     float _power = 10;
     Rigidbody2D _rb2d;
     Vector2 _pos;
-    ReactiveProperty<bool> _isPushed = new ReactiveProperty<bool>();
+    bool _isPushed;
 
-    public IReadOnlyReactiveProperty<bool> IsPushed => _isPushed;
+    public bool IsPushed => _isPushed;
     public Vector2 Pos { get => _pos;}
 
     void Start()
@@ -46,10 +45,5 @@ public class PlayerController : MonoBehaviour
         {
             item.ItemAction();
         }
-    }
-
-    void OnDisable()
-    {
-        _isPushed.Dispose();
     }
 }

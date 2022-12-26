@@ -7,7 +7,7 @@ public class Cigarettes : ItemBase
     int _touchCount = 1;
     public override void ItemAction()
     {
-        GameManager.InstanceGM.AddCigarettes(_touchCount);
+        GameManager.Instance.AddCigarettes(_touchCount);
         Destroy(gameObject);
         //GameManagerの関数を呼ぶ。
     }

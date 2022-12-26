@@ -1,50 +1,51 @@
-﻿using UniRx;
+﻿using System;
 
 public class GameManager
 {
-    static GameManager _instanceGM = new GameManager();
+    static GameManager _instance = new GameManager();
 
     static SoundManager _instanceSM = new SoundManager();
+
+    static UIManager _instanceUI;
+
     static SceneManager _instanceScene = null;
 
     GameState _gameState = GameState.PlayGame;
 
-    ReactiveProperty<int> _touchCigarettes
-        = new ReactiveProperty<int>();
+    int _touchCigarettes;
 
-    ReactiveProperty<float> _sumScore
-        = new ReactiveProperty<float>();
+    float _sumScore;
 
-    ReactiveProperty<float> _fanValue
-        = new ReactiveProperty<float>();
+    float _fanValue;
 
-    ReactiveProperty<float> _fevarValue
-        = new ReactiveProperty<float>();
+    float _fevarValue;
 
 
     public GameState State => _gameState;
-    public static GameManager InstanceGM
+    public static GameManager Instance
     {
         get
         {
-            if(_instanceGM == null)
+            if(_instance == null)
             {
-                _instanceGM = new GameManager();
+                _instance = new GameManager();
             }
-            return _instanceGM;
+            return _instance;
         }
     }
 
     public static SoundManager InstanceSM => _instanceSM;
+
+    public void SetUI(UIManager ui) => _instanceUI = ui;
     public static SceneManager InstanceScene { get => _instanceScene; set => _instanceScene = value; }
 
-    public IReadOnlyReactiveProperty<int> TouchCigarettes => _touchCigarettes;
+    public int TouchCigarettes => _touchCigarettes;
 
-    public IReadOnlyReactiveProperty<float> SumScore => _sumScore;
+    public float SumScore => _sumScore;
 
-    public IReadOnlyReactiveProperty<float> FanValue => _fanValue;
+    public float FanValue => _fanValue;
 
-    public IReadOnlyReactiveProperty<float> FeverValue => _fevarValue;
+    public float FeverValue => _fevarValue;
 
     /// <summary>
     /// 煙草の接触を検知
@@ -52,25 +53,29 @@ public class GameManager
     /// </summary>
     public void AddCigarettes(int touchCigarettes)
     {
-        _touchCigarettes.Value += touchCigarettes;
+        _touchCigarettes += touchCigarettes;
+        _instanceUI.IndicateSmoke();
     }
 
     /// <summary>引数をスコアに加算する</summary>
     public void AddScore(float scoreValue)
     {
-        _sumScore.Value += scoreValue;
+        _sumScore += scoreValue;
+        _instanceUI.ScoreInterpolation(_sumScore);
     }
 
     /// <summary>引数を扇のカウントに加算</summary>
-    public void AddFanValue(float fanVlue)
+    public void AddFanValue(float fanValue)
     {
-        _fanValue.Value += fanVlue;
+        _fanValue += fanValue;
+        _instanceUI.FanGaugeInterpolation(_fanValue);
     }
 
     /// <summary>引数をフィーバー</summary>
     public void AddFevarValue(float fevarValue)
     {
-        _fevarValue.Value += fevarValue;
+        _fevarValue += fevarValue;
+        _instanceUI.FevarGaugeInterpolation(_fevarValue);
     }
 
     public void ChangeState(GameState gameState)

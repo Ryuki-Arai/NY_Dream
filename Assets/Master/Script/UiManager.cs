@@ -1,78 +1,74 @@
-ï»¿using System;
-using UniRx;
-using UnityEngine;
-using UnityEngine.UI;
 using DG.Tweening;
 using System.Collections;
-using Unity.VisualScripting;
+using System.Collections.Generic;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
-public class UiManager : MonoBehaviour
+public class UIManager : MonoBehaviour
 {
-    [SerializeField, Header("ãƒªã‚¶ãƒ«ãƒˆã®çµæœã‚’è¡¨ç¤ºã™ã‚‹")]
+    [SerializeField, Header("ƒŠƒUƒ‹ƒg‚ÌŒ‹‰Ê‚ğ•\¦‚·‚é")]
     ResultChange _resultChange;
 
-    [SerializeField, Header("ãƒªã‚¶ãƒ«ãƒˆã®ã‚­ãƒ£ãƒ³ãƒã‚¹")]
+    [SerializeField, Header("ƒŠƒUƒ‹ƒg‚ÌƒLƒƒƒ“ƒoƒX")]
     Canvas _resultCanvas;
 
-    [SerializeField, Header("ã‚¹ã‚³ã‚¢ã‚’è¡¨ç¤ºã™ã‚‹ãƒ†ã‚­ã‚¹ãƒˆ")]
+    [SerializeField, Header("ƒXƒRƒA‚ğ•\¦‚·‚éƒeƒLƒXƒg")]
     TMP_Text _scoreText;
 
-    [SerializeField, Header("ã‚²ãƒ¼ãƒ ã®åˆ¶é™æ™‚é–“ã‚’è¡¨ç¤ºã™ã‚‹ãƒ†ã‚­ã‚¹ãƒˆ")]
+    [SerializeField, Header("ƒQ[ƒ€‚Ì§ŒÀŠÔ‚ğ•\¦‚·‚éƒeƒLƒXƒg")]
     TMP_Text _timeText;
 
-    [SerializeField, Header("ã‚¿ãƒã‚³ã®ã‚¤ãƒ¡ãƒ¼ã‚¸ç”»åƒ")]
+    [SerializeField, Header("ƒ^ƒoƒR‚ÌƒCƒ[ƒW‰æ‘œ")]
     Image _smongImage;
 
-    [SerializeField, Header("æ‰‡ã‚²ãƒ¼ã‚¸ã®ã‚¹ãƒ©ã‚¤ãƒ€ãƒ¼")]
+    [SerializeField, Header("îƒQ[ƒW‚ÌƒXƒ‰ƒCƒ_[")]
     Slider _fanGaugeSlider;
 
-    [SerializeField, Header("ãƒ•ã‚£ãƒ¼ãƒãƒ¼ã‚²ãƒ¼ã‚¸ã®ã‚¹ãƒ©ã‚¤ãƒ€ãƒ¼")]
+    [SerializeField, Header("ƒtƒB[ƒo[ƒQ[ƒW‚ÌƒXƒ‰ƒCƒ_[")]
     Slider _fevarGaugeSlider;
 
-    [SerializeField, Header("ã‚¹ã‚³ã‚¢ã®å¤‰åŒ–ã«ã‹ã‘ã‚‹æ™‚é–“")]
+    [SerializeField, Header("ƒXƒRƒA‚Ì•Ï‰»‚É‚©‚¯‚éŠÔ")]
     float _changeValueInterval;
 
-    [SerializeField, Header("æ‰‡ã‚²ãƒ¼ã‚¸ã®å¤‰åŒ–ã«ã‹ã‘ã‚‹æ™‚é–“")]
+    [SerializeField, Header("îƒQ[ƒW‚Ì•Ï‰»‚É‚©‚¯‚éŠÔ")]
     float _changeFanGaugeInterval;
 
-    [SerializeField, Header("ãƒ•ã‚£ãƒ¼ãƒãƒ¼ã‚²ãƒ¼ã‚¸ã®å¤‰åŒ–ã«ã‹ã‘ã‚‹æ™‚é–“")]
+    [SerializeField, Header("ƒtƒB[ƒo[ƒQ[ƒW‚Ì•Ï‰»‚É‚©‚¯‚éŠÔ")]
     float _changeFevarGaugeInterval;
 
-    [SerializeField, Header("ã‚²ãƒ¼ãƒ ã®åˆ¶é™æ™‚é–“")]
+    [SerializeField, Header("ƒQ[ƒ€‚Ì§ŒÀŠÔ")]
     float _gameTime;
 
-    [SerializeField, Header("ç…™è‰ã‚’è¡¨ç¤ºã™ã‚‹æ™‚é–“")]
+    [SerializeField, Header("‰Œ‘‚ğ•\¦‚·‚éŠÔ")]
     float _smongTime;
 
-    [SerializeField, Header("ãƒ•ã‚£ãƒ¼ãƒãƒ¼ã‚’è¡¨ç¤ºã™ã‚‹æ™‚é–“")]
+    [SerializeField, Header("ƒtƒB[ƒo[‚ğ•\¦‚·‚éŠÔ")]
     float _fevarTime;
 
-    ReactiveProperty<GameState> _changeState = new ReactiveProperty<GameState>();
+    GameState _changeState;
 
-    //æ‰‡ã‚²ãƒ¼ã‚¸ã®æœ€å¤§
-    const float _fanSliderValueMax = 120;
+    [SerializeField, Header("îƒQ[ƒW‚ÌÅ‘å")]
+    float _fanSliderValueMax = 10;
 
-    //ãƒ•ã‚£ãƒ¼ãƒãƒ¼ã‚²ãƒ¼ã‚¸ã®æœ€å¤§
-    const float _fevarSliderValueMax = 100;
+    [SerializeField, Header("ƒtƒB[ƒo[ƒQ[ƒW‚ÌÅ‘å")]
+    float _fevarSliderValueMax = 10;
 
-    //ã‚²ãƒ¼ãƒ æ™‚é–“ã®è¨ˆæ¸¬ç”¨
+    //ƒQ[ƒ€ŠÔ‚ÌŒv‘ª—p
     float _timer;
 
-    //ç”»åƒã‚’è¡¨ç¤ºã™ã‚‹æ™‚é–“
+    //‰æ‘œ‚ğ•\¦‚·‚éŠÔ
     float _eventInterval;
 
-    //ç”»åƒè¡¨ç¤ºã®è¨ˆæ¸¬ç”¨
+    //‰æ‘œ•\¦‚ÌŒv‘ª—p
     float _eventTimer = 0;
 
-    //ç…™è‰ã®ç…™ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
+    //‰Œ‘‚Ì‰Œ‚ÌƒAƒjƒ[ƒVƒ‡ƒ“
     Animator _smongAni;
-
-    public float FanSliderValueMax => _fanSliderValueMax;
-    public IReadOnlyReactiveProperty<GameState> ChangeState => _changeState;
 
     private void Awake()
     {
+        GameManager.Instance.SetUI(this);
         _fevarGaugeSlider.maxValue = _fevarSliderValueMax;
         _fanGaugeSlider.maxValue = _fanSliderValueMax;
 
@@ -87,60 +83,60 @@ public class UiManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ã‚¹ã‚³ã‚¢ã‚’Dotweenã§å‹•çš„ã«è¡¨ç¤ºã™ã‚‹
+    /// ƒXƒRƒA‚ğDotween‚Å“®“I‚É•\¦‚·‚é
     /// </summary>
     public void ScoreInterpolation(float scoreValue)
     {
         float sliderValue = float.Parse(_scoreText.text);
 
-        DOTween.To(() => sliderValue, // é€£ç¶šçš„ã«å¤‰åŒ–ã•ã›ã‚‹å¯¾è±¡ã®å€¤
-            x => sliderValue = x, // å¤‰åŒ–ã•ã›ãŸå€¤ x ã‚’ã©ã†å‡¦ç†ã™ã‚‹ã‹ã‚’æ›¸ã
-            scoreValue, // x ã‚’ã©ã®å€¤ã¾ã§å¤‰åŒ–ã•ã›ã‚‹ã‹æŒ‡ç¤ºã™ã‚‹
+        DOTween.To(() => sliderValue, // ˜A‘±“I‚É•Ï‰»‚³‚¹‚é‘ÎÛ‚Ì’l
+            x => sliderValue = x, // •Ï‰»‚³‚¹‚½’l x ‚ğ‚Ç‚¤ˆ—‚·‚é‚©‚ğ‘‚­
+            scoreValue, // x ‚ğ‚Ç‚Ì’l‚Ü‚Å•Ï‰»‚³‚¹‚é‚©w¦‚·‚é
             _changeValueInterval)
             .OnUpdate(() => _scoreText.text = sliderValue.ToString("000"));
     }
 
     /// <summary>
-    /// æ‰‡ã‚²ãƒ¼ã‚¸ã‚’Dotweenã§å‹•çš„ã«è¡¨ç¤ºã™ã‚‹
+    /// îƒQ[ƒW‚ğDotween‚Å“®“I‚É•\¦‚·‚é
     /// </summary>
     public void FanGaugeInterpolation(float gaugeValue)
     {
         if (gaugeValue > _fanSliderValueMax) { gaugeValue = _fanSliderValueMax; }
         else if (gaugeValue == _fanSliderValueMax) { return; }
 
-        DOTween.To(() => _fanGaugeSlider.value, // é€£ç¶šçš„ã«å¤‰åŒ–ã•ã›ã‚‹å¯¾è±¡ã®å€¤
-            x => _fanGaugeSlider.value = x, // å¤‰åŒ–ã•ã›ãŸå€¤ x ã‚’ã©ã†å‡¦ç†ã™ã‚‹ã‹ã‚’æ›¸ã
-            gaugeValue, // x ã‚’ã©ã®å€¤ã¾ã§å¤‰åŒ–ã•ã›ã‚‹ã‹æŒ‡ç¤ºã™ã‚‹
+        DOTween.To(() => _fanGaugeSlider.value, // ˜A‘±“I‚É•Ï‰»‚³‚¹‚é‘ÎÛ‚Ì’l
+            x => _fanGaugeSlider.value = x, // •Ï‰»‚³‚¹‚½’l x ‚ğ‚Ç‚¤ˆ—‚·‚é‚©‚ğ‘‚­
+            gaugeValue, // x ‚ğ‚Ç‚Ì’l‚Ü‚Å•Ï‰»‚³‚¹‚é‚©w¦‚·‚é
             _changeFanGaugeInterval);
     }
 
     /// <summary>
-    /// ãƒ•ã‚£ãƒ¼ãƒãƒ¼ã‚²ãƒ¼ã‚¸ã‚’Dotweenã§å‹•çš„ã«è¡¨ç¤ºã™ã‚‹
+    /// ƒtƒB[ƒo[ƒQ[ƒW‚ğDotween‚Å“®“I‚É•\¦‚·‚é
     /// </summary>
     public void FevarGaugeInterpolation(float gaugeValue)
     {
-        if (_changeState.Value != GameState.Fevar)
+        if (_changeState != GameState.Fevar)
         {
-            if (gaugeValue > _fevarSliderValueMax) { gaugeValue = _fevarSliderValueMax; }
-            
-            DOTween.To(() => _fevarGaugeSlider.value, // é€£ç¶šçš„ã«å¤‰åŒ–ã•ã›ã‚‹å¯¾è±¡ã®å€¤
-                x => _fevarGaugeSlider.value = x, // å¤‰åŒ–ã•ã›ãŸå€¤ x ã‚’ã©ã†å‡¦ç†ã™ã‚‹ã‹ã‚’æ›¸ã
-                gaugeValue, // x ã‚’ã©ã®å€¤ã¾ã§å¤‰åŒ–ã•ã›ã‚‹ã‹æŒ‡ç¤ºã™ã‚‹
+            if (gaugeValue >= _fevarSliderValueMax) { GameManager.Instance.ChangeState(GameState.Fevar); }
+
+            DOTween.To(() => _fevarGaugeSlider.value, // ˜A‘±“I‚É•Ï‰»‚³‚¹‚é‘ÎÛ‚Ì’l
+                x => _fevarGaugeSlider.value = x, // •Ï‰»‚³‚¹‚½’l x ‚ğ‚Ç‚¤ˆ—‚·‚é‚©‚ğ‘‚­
+                gaugeValue, // x ‚ğ‚Ç‚Ì’l‚Ü‚Å•Ï‰»‚³‚¹‚é‚©w¦‚·‚é
                 _changeFevarGaugeInterval).OnComplete(() => IndicateFevar());
         }
     }
 
     /// <summary>
-    /// ç…™è‰ã®æ¼”å‡ºã‚’è¡¨ç¤ºã™ã‚‹
+    /// ‰Œ‘‚Ì‰‰o‚ğ•\¦‚·‚é
     /// </summary>
     public void IndicateSmoke()
     {
-        if (_changeState.Value != GameState.Fevar && _changeState.Value != GameState.Finish) 
+        if (_changeState != GameState.Fevar && _changeState != GameState.Finish)
         {
             if (_eventTimer == 0)
             {
                 _eventInterval = _smongTime;
-                StartCoroutine(EventTime()); 
+                StartCoroutine(EventTime());
             }
 
             _eventInterval = _smongTime;
@@ -150,16 +146,16 @@ public class UiManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ãƒ•ã‚£ãƒ¼ãƒãƒ¼ã®æ¼”å‡ºã‚’è¡¨ç¤ºã™ã‚‹
+    /// ƒtƒB[ƒo[‚Ì‰‰o‚ğ•\¦‚·‚é
     /// </summary>
     public void IndicateFevar()
     {
         if (_fevarGaugeSlider.value == _fevarSliderValueMax)
         {
-            if (_eventTimer == 0) 
+            if (_eventTimer == 0)
             {
                 _eventInterval = _fevarTime;
-                StartCoroutine(EventTime()); 
+                StartCoroutine(EventTime());
             }
 
             _eventInterval = _fevarTime;
@@ -167,14 +163,14 @@ public class UiManager : MonoBehaviour
 
             if (_smongImage.enabled)
             {
-                _smongAni.SetBool("isSmoke" , false);
+                _smongAni.SetBool("isSmoke", false);
             }
 
-            _changeState.Value = GameState.Fevar; 
+            _changeState = GameState.Fevar;
         }
     }
 
-    public void Fan() 
+    public void Fan()
     {
         if (_smongImage.enabled)
         {
@@ -184,9 +180,9 @@ public class UiManager : MonoBehaviour
         }
     }
 
-    private IEnumerator GameTime() 
+    private IEnumerator GameTime()
     {
-        while(_changeState.Value != GameState.Finish && _timer > 0) 
+        while (_changeState != GameState.Finish && _timer > 0)
         {
             yield return new WaitForSeconds(1);
 
@@ -194,26 +190,25 @@ public class UiManager : MonoBehaviour
             _timeText.text = _timer.ToString("00");
         }
 
-        if (_timer <= 0) 
+        if (_timer <= 0)
         {
-            _changeState.Value = GameState.Finish;
+            _changeState = GameState.Finish;
             _timer = 0;
             _eventTimer = 0;
             _resultCanvas.enabled = true;
             _resultChange.Result(int.Parse(_scoreText.text));
         }
     }
-
     private IEnumerator EventTime()
     {
-        while (_changeState.Value != GameState.Finish && _eventInterval > _eventTimer)
+        while (_changeState != GameState.Finish && _eventInterval > _eventTimer)
         {
             yield return new WaitForEndOfFrame();
 
             _eventTimer += Time.deltaTime;
         }
 
-        if (_eventInterval < _eventTimer) 
+        if (_eventInterval < _eventTimer)
         {
             _eventTimer = 0;
 
@@ -221,9 +216,9 @@ public class UiManager : MonoBehaviour
             {
                 _smongAni.SetBool("isSmoke", false);
             }
-            else 
+            else
             {
-                _changeState.Value = GameState.PlayGame;
+                _changeState = GameState.PlayGame;
             }
         }
     }

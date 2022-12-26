@@ -31,7 +31,7 @@ public class ItemGenerator : MonoBehaviour
     {
 
         _timeCount += Time.deltaTime;
-        if (GameManager.InstanceGM.State != GameState.Fevar)
+        if (GameManager.Instance.State != GameState.Fevar)
         {
             if (_timeCount >= _interval)
             {
@@ -76,6 +76,6 @@ public class ItemGenerator : MonoBehaviour
     void CreateItemOnFever()
     {
         int _itemNum = Random.Range(_minProbability, _eggplants.Length);
-        Instantiate(_eggplants[_itemNum], _generatePos[Random.Range(0, _generatePos.Length)]);
+        foreach(var pos in _generatePos) Instantiate(_eggplants[_itemNum], pos);
     }
 }

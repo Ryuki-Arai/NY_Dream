@@ -123,7 +123,7 @@ MonoBehaviour:
   _probability: 30
   _itemType: 1
   _score: 3
-  _feverScore: 2
+  _feverScore: 3
 --- !u!58 &2271141707766807662
 CircleCollider2D:
   m_ObjectHideFlags: 0
