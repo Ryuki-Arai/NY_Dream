@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Playables;
+using UnityEngine.Timeline;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -46,7 +48,13 @@ public class UIManager : MonoBehaviour
     [SerializeField, Header("フィーバーを表示する時間")]
     float _fevarTime;
 
-    GameState _changeState;
+    [SerializeField, Header("TimeLineの再生機器")]
+    PlayableDirector _timeLine;
+
+    [SerializeField, Header("フィーバー時のTimeLine")]
+    TimelineAsset _feverTime;
+    [SerializeField, Header("フィーバー終了時のTimeLine")]
+    TimelineAsset _disFeverTime;
 
     [SerializeField, Header("扇ゲージの最大")]
     int _fanSliderValueMax = 10;
@@ -78,6 +86,7 @@ public class UIManager : MonoBehaviour
         _smongAni = _smongImage.gameObject.GetComponent<Animator>();
 
         _resultCanvas.enabled = false;
+        _timeLine.GetComponent<PlayableDirector>();
 
         StartCoroutine(GameTime());
     }
@@ -115,14 +124,15 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void FevarGaugeInterpolation(float gaugeValue)
     {
-        if (_changeState != GameState.Fevar)
+        if (GameManager.Instance.State != GameState.Fevar)
         {
-            if (gaugeValue >= _fevarSliderValueMax) { GameManager.Instance.ChangeState(GameState.Fevar); }
             _fevarGaugeSlider.Value = (int)gaugeValue; //ToDo intとFloatごっちゃなの修正
+            IndicateFevar();
             /*DOTween.To(() => _fevarGaugeSlider.value, // 連続的に変化させる対象の値
                 x => _fevarGaugeSlider.value = x, // 変化させた値 x をどう処理するかを書く
                 gaugeValue, // x をどの値まで変化させるか指示する
                 _changeFevarGaugeInterval).OnComplete(() => IndicateFevar());//*/
+
         }
     }
 
@@ -131,7 +141,7 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void IndicateSmoke()
     {
-        if (_changeState != GameState.Fevar && _changeState != GameState.Finish)
+        if (GameManager.Instance.State != GameState.Fevar && GameManager.Instance.State != GameState.Finish)
         {
             if (_eventTimer == 0)
             {
@@ -155,6 +165,8 @@ public class UIManager : MonoBehaviour
             if (_eventTimer == 0)
             {
                 _eventInterval = _fevarTime;
+                _timeLine.playableAsset = _feverTime;
+                _timeLine.Play();
                 StartCoroutine(EventTime());
             }
 
@@ -166,7 +178,7 @@ public class UIManager : MonoBehaviour
                 _smongAni.SetBool("isSmoke", false);
             }
 
-            _changeState = GameState.Fevar;
+            GameManager.Instance.ChangeState(GameState.Fevar);
         }
     }
 
@@ -182,7 +194,7 @@ public class UIManager : MonoBehaviour
 
     private IEnumerator GameTime()
     {
-        while (_changeState != GameState.Finish && _timer > 0)
+        while (GameManager.Instance.State != GameState.Finish && _timer > 0)
         {
             yield return new WaitForSeconds(1);
 
@@ -192,7 +204,7 @@ public class UIManager : MonoBehaviour
 
         if (_timer <= 0)
         {
-            _changeState = GameState.Finish;
+            GameManager.Instance.ChangeState(GameState.Finish);
             _timer = 0;
             _eventTimer = 0;
             _resultCanvas.enabled = true;
@@ -201,10 +213,10 @@ public class UIManager : MonoBehaviour
     }
     private IEnumerator EventTime()
     {
-        while (_changeState != GameState.Finish && _eventInterval > _eventTimer)
+        while (GameManager.Instance.State != GameState.Finish && _eventInterval > _eventTimer)
         {
             yield return new WaitForEndOfFrame();
-
+            
             _eventTimer += Time.deltaTime;
         }
 
@@ -218,7 +230,9 @@ public class UIManager : MonoBehaviour
             }
             else
             {
-                _changeState = GameState.PlayGame;
+                _timeLine.playableAsset = _disFeverTime;
+                _timeLine.Play();
+                GameManager.Instance.ChangeState(GameState.PlayGame);
             }
         }
     }
