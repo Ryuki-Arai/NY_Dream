@@ -75,7 +75,10 @@ public class ItemGenerator : MonoBehaviour
     /// </summary>
     void CreateItemOnFever()
     {
-        int _itemNum = Random.Range(_minProbability, _eggplants.Length);
-        foreach(var pos in _generatePos) Instantiate(_eggplants[_itemNum], pos);
+        foreach (var pos in _generatePos)
+        {
+            int _itemNum = Random.Range(_minProbability, _eggplants.Length);
+            Instantiate(_eggplants[_itemNum], pos);
+        }
     }
 }
