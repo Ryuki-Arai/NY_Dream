@@ -42,6 +42,6 @@ public class ResultChange : MonoBehaviour
         {
             _panelImage.sprite = _badImage;
         }
-        _scoreText.text = "Score" + ":" + score.ToString();
+        _scoreText.text = "‚Æ‚­‚Ä‚ñ " + score.ToString();
     }
 }
