@@ -48,11 +48,9 @@ public class UIManager : MonoBehaviour
     [SerializeField, Header("フィーバーを表示する時間")]
     float _fevarTime;
 
-    [SerializeField, Header("TimeLineの再生機器")]
-    PlayableDirector _timeLine;
-
     [SerializeField, Header("フィーバー時のTimeLine")]
     TimelineAsset _feverTime;
+
     [SerializeField, Header("フィーバー終了時のTimeLine")]
     TimelineAsset _disFeverTime;
 
@@ -73,6 +71,9 @@ public class UIManager : MonoBehaviour
 
     //煙草の煙のアニメーション
     Animator _smongAni;
+
+    //タイムラインを再生するディレクター
+    PlayableDirector _timeLine;
 
     private void Awake()
     {
@@ -122,11 +123,11 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// フィーバーゲージをDotweenで動的に表示する
     /// </summary>
-    public void FevarGaugeInterpolation(float gaugeValue)
+    public void FevarGaugeInterpolation(int gaugeValue)
     {
         if (GameManager.Instance.State != GameState.Fevar)
         {
-            _fevarGaugeSlider.Value = (int)gaugeValue; //ToDo intとFloatごっちゃなの修正
+            _fevarGaugeSlider.Value += gaugeValue;
             IndicateFevar();
             
             /*DOTween.To(() => _fevarGaugeSlider.value, // 連続的に変化させる対象の値
@@ -161,7 +162,7 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void IndicateFevar()
     {
-        if (_fevarGaugeSlider.Value == _fevarSliderValueMax)
+        if (_fevarGaugeSlider.Value >= _fevarSliderValueMax)
         {
             if (_eventTimer == 0)
             {
@@ -219,6 +220,7 @@ public class UIManager : MonoBehaviour
             yield return new WaitForEndOfFrame();
             
             _eventTimer += Time.deltaTime;
+            _timeText.text = (_eventInterval - _eventTimer).ToString("00");
         }
 
         if (_eventInterval <= _eventTimer)

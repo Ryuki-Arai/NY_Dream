@@ -7,7 +7,7 @@ public class Eggplant : ItemBase
     [SerializeField]
     float _score = 0f;
     [SerializeField]
-    float _feverScore = 0f;
+    int _feverScore = 0;
     public override void ItemAction()
     {
         GameManager.Instance.AddScore(_score);

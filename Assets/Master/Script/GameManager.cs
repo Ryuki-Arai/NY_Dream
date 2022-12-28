@@ -72,10 +72,9 @@ public class GameManager
     }
 
     /// <summary>引数をフィーバー</summary>
-    public void AddFevarValue(float fevarValue)
+    public void AddFevarValue(int fevarValue)
     {
-        _fevarValue += fevarValue;
-        _instanceUI.FevarGaugeInterpolation(_fevarValue);
+        _instanceUI.FevarGaugeInterpolation(fevarValue);
     }
 
     public void ChangeState(GameState gameState)

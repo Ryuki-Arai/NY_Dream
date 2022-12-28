@@ -40,5 +40,6 @@ public class HAgauge : MonoBehaviour
         else if (value >= (maxValue / 3) * 2) _image.sprite = _gaugeImage[2];
         else if (value >= maxValue / 3) _image.sprite = _gaugeImage[1];
         else _image.sprite = _gaugeImage[0];
+        Debug.Log(value);
     }
 }
