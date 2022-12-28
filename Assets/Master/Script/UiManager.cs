@@ -86,7 +86,7 @@ public class UIManager : MonoBehaviour
         _smongAni = _smongImage.gameObject.GetComponent<Animator>();
 
         _resultCanvas.enabled = false;
-        _timeLine.GetComponent<PlayableDirector>();
+        _timeLine = GetComponent<PlayableDirector>();
 
         StartCoroutine(GameTime());
     }
@@ -128,6 +128,7 @@ public class UIManager : MonoBehaviour
         {
             _fevarGaugeSlider.Value = (int)gaugeValue; //ToDo intとFloatごっちゃなの修正
             IndicateFevar();
+            
             /*DOTween.To(() => _fevarGaugeSlider.value, // 連続的に変化させる対象の値
                 x => _fevarGaugeSlider.value = x, // 変化させた値 x をどう処理するかを書く
                 gaugeValue, // x をどの値まで変化させるか指示する
@@ -220,20 +221,12 @@ public class UIManager : MonoBehaviour
             _eventTimer += Time.deltaTime;
         }
 
-        if (_eventInterval < _eventTimer)
+        if (_eventInterval <= _eventTimer)
         {
-            _eventTimer = 0;
-
-            if (_smongImage.enabled)
-            {
-                _smongAni.SetBool("isSmoke", false);
-            }
-            else
-            {
-                _timeLine.playableAsset = _disFeverTime;
-                _timeLine.Play();
-                GameManager.Instance.ChangeState(GameState.PlayGame);
-            }
+            _fevarGaugeSlider.Value = 0;
+            _timeLine.playableAsset = _disFeverTime;
+            _timeLine.Play();
+            GameManager.Instance.ChangeState(GameState.PlayGame);
         }
     }
 }

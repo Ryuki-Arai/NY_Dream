@@ -33,14 +33,17 @@ public class ResultChange : MonoBehaviour
         if(_happyScore <= score)
         {
             _panelImage.sprite = _happyImage;
+            GameManager.InstanceSM.CallSound(SoundType.BGM, 4);
         }
         else if(_normalScore <= score)
         {
             _panelImage.sprite = _normalImage;
+            GameManager.InstanceSM.CallSound(SoundType.BGM, 5);
         }
         else 
         {
             _panelImage.sprite = _badImage;
+            GameManager.InstanceSM.CallSound(SoundType.BGM, 6);
         }
         _scoreText.text = "‚Æ‚­‚Ä‚ñ " + score.ToString();
     }
