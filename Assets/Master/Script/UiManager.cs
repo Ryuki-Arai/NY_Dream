@@ -216,7 +216,7 @@ public class UIManager : MonoBehaviour
         while (GameManager.Instance.State != GameState.Finish && _eventInterval > _eventTimer)
         {
             yield return new WaitForEndOfFrame();
-            Debug.Log(_eventTimer);
+            //Debug.Log(_eventTimer);
             _eventTimer += Time.deltaTime;
             //_timeText.text = (_eventInterval - _eventTimer).ToString("00");
         }

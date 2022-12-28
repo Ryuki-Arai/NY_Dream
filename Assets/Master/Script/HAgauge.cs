@@ -24,7 +24,7 @@ public class HAgauge : MonoBehaviour
             if (_isFever)
             {
                 this.value = value;
-                Debug.Log(this.value);
+                //Debug.Log(this.value);
                 StateChange();
             }
         }
