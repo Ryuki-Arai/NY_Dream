@@ -1692,23 +1692,23 @@ PlayableDirector:
   m_GameObject: {fileID: 1470275141}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: 55f20175621b8ea4e9dbabaeda955f54, type: 2}
-  m_InitialState: 1
+  m_PlayableAsset: {fileID: 11400000, guid: d970e9845c23a6c4ab806a31cad3a216, type: 2}
+  m_InitialState: 0
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
   m_InitialTime: 0
   m_SceneBindings:
   - key: {fileID: -1324262654748078249, guid: d970e9845c23a6c4ab806a31cad3a216, type: 2}
     value: {fileID: 445191084}
-  - key: {fileID: -7731574214749523931, guid: d970e9845c23a6c4ab806a31cad3a216, type: 2}
-    value: {fileID: 445191086}
   - key: {fileID: -2705800627665093671, guid: d970e9845c23a6c4ab806a31cad3a216, type: 2}
     value: {fileID: 773424413}
   - key: {fileID: -1324262654748078249, guid: 55f20175621b8ea4e9dbabaeda955f54, type: 2}
     value: {fileID: 445191084}
   - key: {fileID: -2705800627665093671, guid: 55f20175621b8ea4e9dbabaeda955f54, type: 2}
     value: {fileID: 773424413}
-  - key: {fileID: -4280441051816397657, guid: 55f20175621b8ea4e9dbabaeda955f54, type: 2}
+  - key: {fileID: 8335284631093953606, guid: 55f20175621b8ea4e9dbabaeda955f54, type: 2}
+    value: {fileID: 445191086}
+  - key: {fileID: 7544413781066899373, guid: d970e9845c23a6c4ab806a31cad3a216, type: 2}
     value: {fileID: 445191086}
   m_ExposedReferences:
     m_References: []
@@ -2176,9 +2176,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: HaGauge
       objectReference: {fileID: 0}
+    - target: {fileID: 6827947665880164323, guid: 218259f911e082846b8939e895899118, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6827947665880164325, guid: 218259f911e082846b8939e895899118, type: 3}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 2b6cbe61a5abbc148989fc682a66e8af, type: 3}
+    - target: {fileID: 6827947665880164327, guid: 218259f911e082846b8939e895899118, type: 3}
+      propertyPath: _interval
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 218259f911e082846b8939e895899118, type: 3}

@@ -128,7 +128,11 @@ public class UIManager : MonoBehaviour
         if (GameManager.Instance.State != GameState.Fevar)
         {
             _fevarGaugeSlider.Value += gaugeValue;
-            IndicateFevar();
+            if (_fevarGaugeSlider.Value >= _fevarSliderValueMax)
+            {
+                _fevarGaugeSlider.SetZero();
+                IndicateFevar();
+            }
             
             /*DOTween.To(() => _fevarGaugeSlider.value, // 連続的に変化させる対象の値
                 x => _fevarGaugeSlider.value = x, // 変化させた値 x をどう処理するかを書く
@@ -162,25 +166,22 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void IndicateFevar()
     {
-        if (_fevarGaugeSlider.Value >= _fevarSliderValueMax)
+        GameManager.Instance.ChangeState(GameState.Fevar);
+        UnityEngine.Debug.Log("Fever");
+        if (_eventTimer == 0)
         {
-            if (_eventTimer == 0)
-            {
-                _eventInterval = _fevarTime;
-                _timeLine.playableAsset = _feverTime;
-                _timeLine.Play();
-                StartCoroutine(EventTime());
-            }
-
             _eventInterval = _fevarTime;
-            _eventTimer = 0;
+            _timeLine.playableAsset = _feverTime;
+            _timeLine.Play();
+            StartCoroutine(EventTime());
+        }
 
-            if (_smongImage.enabled)
-            {
-                _smongAni.SetBool("isSmoke", false);
-            }
+        _eventInterval = _fevarTime;
+        _eventTimer = 0;
 
-            GameManager.Instance.ChangeState(GameState.Fevar);
+        if (_smongImage.enabled)
+        {
+            _smongAni.SetBool("isSmoke", false);
         }
     }
 
@@ -220,15 +221,26 @@ public class UIManager : MonoBehaviour
             yield return new WaitForEndOfFrame();
             
             _eventTimer += Time.deltaTime;
-            _timeText.text = (_eventInterval - _eventTimer).ToString("00");
+            //_timeText.text = (_eventInterval - _eventTimer).ToString("00");
         }
 
-        if (_eventInterval <= _eventTimer)
+        if (GameManager.Instance.State == GameState.Fevar && _eventInterval <= _eventTimer)
         {
-            _fevarGaugeSlider.Value = 0;
+            GameManager.Instance.ChangeState(GameState.PlayGame);
             _timeLine.playableAsset = _disFeverTime;
             _timeLine.Play();
-            GameManager.Instance.ChangeState(GameState.PlayGame);
+            StartCoroutine(ResetCorutine());
         }
+    }
+
+    private IEnumerator ResetCorutine()
+    {
+        double d = _timeLine.time;
+        while (d <= _timeLine.time )
+        {
+            d += _timeLine.time - d;
+            yield return new WaitForEndOfFrame();
+        }
+        _fevarGaugeSlider.ResetValue();
     }
 }

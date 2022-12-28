@@ -18,9 +18,6 @@ public class GameManager
 
     float _fanValue;
 
-    float _fevarValue;
-
-
     public GameState State => _gameState;
     public static GameManager Instance
     {
@@ -44,8 +41,6 @@ public class GameManager
     public float SumScore => _sumScore;
 
     public float FanValue => _fanValue;
-
-    public float FeverValue => _fevarValue;
 
     /// <summary>
     /// 煙草の接触を検知
