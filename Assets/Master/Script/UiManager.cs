@@ -167,14 +167,11 @@ public class UIManager : MonoBehaviour
     public void IndicateFevar()
     {
         GameManager.Instance.ChangeState(GameState.Fevar);
-        UnityEngine.Debug.Log("Fever");
-        if (_eventTimer == 0)
-        {
-            _eventInterval = _fevarTime;
-            _timeLine.playableAsset = _feverTime;
-            _timeLine.Play();
-            StartCoroutine(EventTime());
-        }
+        
+        _eventInterval = _fevarTime;
+        _timeLine.playableAsset = _feverTime;
+        _timeLine.Play();
+        StartCoroutine(EventTime());
 
         _eventInterval = _fevarTime;
         _eventTimer = 0;
@@ -219,7 +216,7 @@ public class UIManager : MonoBehaviour
         while (GameManager.Instance.State != GameState.Finish && _eventInterval > _eventTimer)
         {
             yield return new WaitForEndOfFrame();
-            
+            Debug.Log(_eventTimer);
             _eventTimer += Time.deltaTime;
             //_timeText.text = (_eventInterval - _eventTimer).ToString("00");
         }
