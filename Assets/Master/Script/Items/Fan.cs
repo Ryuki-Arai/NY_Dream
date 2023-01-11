@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Fan : ItemBase
 {
-    float _gageScore = 40;
+    [SerializeField] float _gageScore = 1;
     public override void ItemAction()
     {
         GameManager.Instance.AddFanValue(_gageScore);

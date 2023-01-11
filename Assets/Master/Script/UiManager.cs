@@ -111,12 +111,9 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void FanGaugeInterpolation(float gaugeValue)
     {
-        if (gaugeValue > _fanSliderValueMax) { gaugeValue = _fanSliderValueMax; }
-        else if (gaugeValue == _fanSliderValueMax) { return; }
-
         DOTween.To(() => _fanGaugeSlider.value, // 連続的に変化させる対象の値
             x => _fanGaugeSlider.value = x, // 変化させた値 x をどう処理するかを書く
-            gaugeValue, // x をどの値まで変化させるか指示する
+            (gaugeValue+ _fanGaugeSlider.value), // x をどの値まで変化させるか指示する
             _changeFanGaugeInterval);
     }
 
@@ -184,11 +181,12 @@ public class UIManager : MonoBehaviour
 
     public void Fan()
     {
+        if (_fanSliderValueMax > _fanGaugeSlider.value) return;
         if (_smongImage.enabled)
         {
-            FanGaugeInterpolation(0);
+            _fanGaugeSlider.value = 0;
 
-            _smongAni.Play("SmokeEnd");
+            _smongAni.SetBool("isSmoke", false);
         }
     }
 

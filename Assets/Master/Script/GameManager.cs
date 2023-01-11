@@ -16,8 +16,6 @@ public class GameManager
 
     float _sumScore;
 
-    float _fanValue;
-
     public GameState State => _gameState;
     public static GameManager Instance
     {
@@ -40,8 +38,6 @@ public class GameManager
 
     public float SumScore => _sumScore;
 
-    public float FanValue => _fanValue;
-
     /// <summary>
     /// 煙草の接触を検知
     /// intで加算されたら検知判定
@@ -62,8 +58,7 @@ public class GameManager
     /// <summary>引数を扇のカウントに加算</summary>
     public void AddFanValue(float fanValue)
     {
-        _fanValue += fanValue;
-        _instanceUI.FanGaugeInterpolation(_fanValue);
+        _instanceUI.FanGaugeInterpolation(fanValue);
     }
 
     /// <summary>引数をフィーバー</summary>
